@@ -6,4 +6,5 @@ WORKDIR /opt/rrshareweb
 VOLUME /var/lib/rrshareweb
 EXPOSE 3001
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
+CMD ["/opt/rrshareweb/rrshareweb"]
 

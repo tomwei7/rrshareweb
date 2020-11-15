@@ -14,15 +14,17 @@ fi
 sed -i 's#f:/store#${RR_SAVE_PATH}#g' $CONF_FILE
 
 # switch user
-if [[ ! -z ${DOCKER_UID} && ! -f /.user-initialized ]]; then
+if [[ ! -z ${DOCKER_UID} ]]; then
     if [[ -z ${DOCKER_GID} ]]; then
         DOCKER_GID=${DOCKER_UID}
     fi
-    groupadd -f -g ${DOCKER_GID} rrshareweb
-    useradd -u ${DOCKER_UID} -g ${DOCKER_GID} --home-dir ${RRSHAREWEB_DIR} rrshareweb
     USER=rrshareweb
-    touch /.user-initialized
-    chown ${DOCKER_UID}:${DOCKER_GID} -R ${RRSHAREWEB_DIR}
+    if [[ ! -f /.user-initialized ]]; then
+        groupadd -f -g ${DOCKER_GID} rrshareweb
+        useradd -u ${DOCKER_UID} -g ${DOCKER_GID} --home-dir ${RRSHAREWEB_DIR} rrshareweb
+        chown ${DOCKER_UID}:${DOCKER_GID} -R ${RRSHAREWEB_DIR}
+        touch /.user-initialized
+    fi
 fi
 
 if [[ ${USER} == "root" ]];then
